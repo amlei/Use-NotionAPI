@@ -8,6 +8,8 @@
 @IDE: PyCharm 2023.1
 """
 import re
+
+import cfgv
 import requests
 from data import web
 from data import gol
@@ -18,10 +20,10 @@ class Book(gol.Option):
     def __init__(self, page: int = None):
         super().__init__()
         """
-        默认为书籍，不修改self.option
-        无论怎样继承该类调用get方法都不会最终影响全局的option
-        所以在调用的子类中需要再次使用get方法，尽管不是重写
-        """
+                默认为书籍，不修改self.option
+                无论怎样继承该类调用get方法都不会最终影响全局的option
+                所以在调用的子类中需要再次使用get方法，尽管不是重写
+                """
         self.url = web.URL(Class=self.option, page=page).url
         self.header = web.URL(self.option).Header
 
@@ -51,7 +53,7 @@ class Book(gol.Option):
             self.Title.push(a['title'])
             # print(a['title'])
             count += 1
-            if gol.MAXPage().page <= count:
+            if gol.MAXPage().get() <= count:
                 break
 
         return self.Title
@@ -155,17 +157,16 @@ class Video(Book, gol.Option):
         return self.CoverLink
 
 if __name__ == '__main__':
-    c = Book(page=15).coverLink()
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-
-    print("Video")
-    c = Video(page=15).coverLink()
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
+    # c = Book(page=15).coverLink()
+    ca = Book().rating()
+    for i in range(15):
+        aa = ca.pop()
+        print(aa, type(aa))
+    # print(c.pop())
+    # print(c.pop())
+    # print(c.pop())
+    # print(c.pop())
+    # print(c.pop())
+    #
+    # print("Video")
+    # c = Video(page=15).coverLink()

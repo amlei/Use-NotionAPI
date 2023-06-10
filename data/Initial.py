@@ -46,20 +46,25 @@ class Initial:
         }
 
 if __name__ == '__main__':
-    from notion_client import Client
-    init = Initial()
-    client = Client(auth=f"{init.Token['Book']}")
-    new_page = {
-        "title": [
-            {
-                "text": {
-                    "content": "《Test》"
-                }
-            }
-        ]
-    }
-
-    # Add the new page to the database
-    created_page = client.pages.create(parent={
-        "database_id": f"{init.DatabaseID['Book']}"
-    }, properties=new_page)
+    # from notion_client import Client
+    # init = Initial()
+    # client = Client(auth=f"{init.Token['Book']}")
+    # new_page = {
+    #     "title": [
+    #         {
+    #             "text": {
+    #                 "content": "《Test》"
+    #             }
+    #         }
+    #     ]
+    # }
+    #
+    # # Add the new page to the database
+    # created_page = client.pages.create(parent={
+    #     "database_id": f"{init.DatabaseID['Book']}"
+    # }, properties=new_page)
+    print(Initial().star)
+    print(Initial().star[:8])
+    print(Initial().star[:6])
+    print(Initial().star[:4])
+    print(Initial().star[:2])

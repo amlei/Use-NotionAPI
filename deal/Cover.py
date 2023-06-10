@@ -12,19 +12,30 @@ from deal import web
 from data import gol
 
 """
-图片保存
+图片保存, 默认情况保存书籍
 """
-
 def coverLink():
+    global title, link
+
+    OpValue = gol.Option().getValue()
+    # OpValue = 1
     text = []
-    title = web.Book().title()
-    link = web.Book().coverLink()
-    for i in range(gol.MAXPage().page):
+    fileName = ""
+    if OpValue == 0:
+        fileName = "book"
+        title = web.Book().title()
+        link = web.Book().coverLink()
+    elif OpValue == 1:
+        fileName = "video"
+        title = web.Video().title()
+        link = web.Video().coverLink()
+
+    for i in range(gol.MAXPage().get()):
         text.append([title.pop(), str(link.pop())])
 
     try:
-        content = pandas.DataFrame(text, columns=["Book", "Cover"])
-        content.to_csv("../data/book.csv", encoding="GBK", index=True)
+        content = pandas.DataFrame(text, columns=["Title", "Cover"])
+        content.to_csv(f"../result/{fileName}.csv", encoding="GBK", index=True)
     except PermissionError:
         raise gol.Error("File is Opening")
 

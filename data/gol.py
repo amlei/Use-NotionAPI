@@ -17,6 +17,9 @@ class MAXPage():
     def __init__(self):
         self.page = 15
 
+    def get(self):
+        return self.page
+
 # 书籍或影片
 class Option:
     def __init__(self):
@@ -25,8 +28,11 @@ class Option:
         """
         self.option = 0
 
-    def get(self):
+    def getValue(self):
         return self.option
+
+    def getString(self):
+        return ["book", "movie"]
 
 if __name__ == '__main__':
     class vi(Option):
@@ -42,3 +48,5 @@ if __name__ == '__main__':
                 print(f"{string}影视")
             else:
                 raise Error("列表获取错误！请在0与1之间选择，0：书籍  1：影视。")
+
+    print(Option().getString()[0])

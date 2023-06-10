@@ -11,8 +11,8 @@ from notion_client import Client
 from datetime import datetime
 from pythons.base import Queue
 from data.user import data
-from data.book import book
-from deal.bookInfo import info
+from data.Stack import book
+from deal.Cover import info
 
 """
 ···························································分割线························································
@@ -62,7 +62,6 @@ try:     # 极少书籍不包含评论或评星，跳过
         # 作者，同上原理
         author = []
         AuthorContent = bookData.author.pop()
-
 
         try:
             if len(AuthorContent[1]) == 3:  # 存在译者情况  ['弗朗西斯·苏（FrancisSu）', ['沈吉儿、韩潇潇', '中信出版集团', '2022-6-10', '69']]
