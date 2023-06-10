@@ -12,14 +12,14 @@ class Initial:
     def __init__(self):
         # Token 码
         self.Token = {
-            "Book": "secret_9yAkBCPLd5rakqZgiTqxdtGCqJTCoPQXGsA08yI8fLs",
-            "Video": "secret_9yAkBCPLd5rakqZgiTqxdtGCqJTCoPQXGsA08yI8fLs"
+            "Book": "",
+            "Video": ""
         }
 
         # 数据库ID
         self.DatabaseID = {
-            "Book": "c284686fbf50467898bf2c0cc224ba51",
-            "Video": "ed8f1332c10b45698ce631598f39d5f0"
+            "Book": "",
+            "Video": ""
         }
 
         # 评分：默认5星,每颗星占两个字符
