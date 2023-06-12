@@ -43,11 +43,11 @@ The programming project is in the test phase, I am not sure that it can get runn
 
 Have two accounts, they are "[Douban](https://www.douban.com/)" and [Notion](https://www.notion.so/).
 
-![image-20230612163511339](assets/image-20230612163511339.png)
+![image-20230612163511339](./assets/image-20230612163511339.png)
 
 ## 2. About Code Files (Waiting Final Completed)
 
-<img src="assets/image-20230612161852099.png" alt="image-20230612161852099|" style="zoom:75%;" />
+<img src="./assets/image-20230612161852099.png" alt="image-20230612161852099|" style="zoom:75%;" />
 
 **The Follow Content is From an Old Version❗**
 
@@ -75,9 +75,9 @@ You must go throught  [Second Step](#2. Modify Necessarily Data)  can complete r
 
 # 🎗️For Example
 
-![image-20230331205442903](assets/image-20230331205442903.png)
+![image-20230331205442903](./assets/image-20230331205442903.png)
 
-![image-20230331205436292](assets/image-20230331205436292.png)
+![image-20230331205436292](./assets/image-20230331205436292.png)
 
 [With Notion API——Contain data of the books and videos in Douban website and that update into Notion database_bilibili](https://www.bilibili.com/video/BV15o4y1W7hw/?spm_id_from=333.999.0.0)
 

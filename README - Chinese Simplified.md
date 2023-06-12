@@ -43,11 +43,11 @@
 
 拥有[豆瓣](https://www.douban.com/)和[Notion](https://www.notion.so/)账户。
 
-![image-20230612163511339](assets/image-20230612163511339.png)
+![image-20230612163511339](./assets/image-20230612163511339.png)
 
 ## 2. 项目架构  (等待最后完成)
 
-<img src="assets/image-20230612161852099.png" alt="image-20230612161852099|" style="zoom:75%;" />
+<img src="./assets/image-20230612161852099.png" alt="image-20230612161852099|" style="zoom:75%;" />
 
 **以下内容均是旧版本❗**
 
@@ -75,9 +75,9 @@ pythons包下的文件为Stack（栈）和Queue（队列）的实现方法。
 
 # 🎗️For Example
 
-![image-20230331205442903](assets/image-20230331205442903.png)
+![image-20230331205442903](./assets/image-20230331205442903.png)
 
-![image-20230331205436292](assets/image-20230331205436292.png)
+![image-20230331205436292](./assets/image-20230331205436292.png)
 
 [Notion API的使用——获取豆瓣书影数据更新入Notion数据库_哔哩哔哩](https://www.bilibili.com/video/BV15o4y1W7hw/?spm_id_from=333.999.0.0)
 
