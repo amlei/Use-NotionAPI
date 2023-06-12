@@ -1,5 +1,5 @@
 # With-NotionAPI
-> Saving data of the books and videos data to notion page with Python . 
+> Saving data of the books and videos into the notion page with Python.
 
 >使用Python将图书和影视数据存放入Notion中。
 
@@ -7,60 +7,67 @@
 
 [English](./README.md)
 
-[中文简体](./README%20-%20Chinese%20Simplified)
+[中文简体](./README%20-%20Chinese%20Simplified.md)
 
 # 🖼️Environment
 
-- Python 3.9+
+- Python 3.9+ ( < 3.12)
 - PyCharm 2021+
 
 # 🎈Attention
 
-The progarmming is during test phase, so I not sure it can greate running in your mechaine. Furthermore, I am also trying build better function. If you have discover some problems in the programming and that be willing told to me, while I am very will to solving its. Think you!
+The programming project is in the test phase, I am not sure that it can get running on your machine. Furthermore, I am also trying to build function for better. If you have discovered some problems, tell me. I am very will to solve it. Think you!
+
+[Click here to view progress](https://www.notion.so/yapotato/Notion-API-93ad50c4bcc34c608fdc1fe211d6b322?pvs=4)
+
+---
+
+# 🎢 Schedule
+
+## Web ([Douban](https://www.douban.com/))
+
+- [x] Cover Link (Save the file of the Excel)
+- [x] Page Turning
+- [ ] Specify the number of  data
+
+## Update into Notion
+
+- [ ] Last Run
+- [ ] Iron
+- [ ] Cover
+- [x] Start
 
 # 🤖Action
 
 ## 1. Ready
 
-Have two account, them are both "[Douban](https://www.douban.com/)" and [Notion](https://www.notion.so/).
+Have two accounts, they are "[Douban](https://www.douban.com/)" and [Notion](https://www.notion.so/).
 
-## 2. Modify Necessarily Data
+![image-20230612163511339](assets/image-20230612163511339.png)
+
+## 2. About Code Files (Waiting Final Completed)
+
+<img src="assets/image-20230612161852099.png" alt="image-20230612161852099|" style="zoom:75%;" />
+
+**The Follow Content is From an Old Version❗**
+
+<u>Accoding to the user.py can know it save data and function.</u>
+
+<u>book.py for other python files to quote data.</u>
+
+<u>bookInfo.py during testing (Addition export cover link into file is csv on April 9,2023).</u>
+
+<u>spider.py is main function of  spider website.</u>
+
+<u>At present saving data and running main file in main.py.</u>
+
+<u>In pythons packages under file is both Stack and Queue.</u> 
+
+## 3. Modify Necessarily Data
 
 A begin with, modify some necessarily data that are website and Notion API. For webiste, it is "[Douban](https://www.douban.com/)"(A platform of remark books and films) both  URL and Cookie. For [Notion API](https://developers.notion.com/), it is both token and id of database or pages.
 
-
-
 In addition, modify other default information about book, which are star, status, bookCategory, bookRemark and bookExcerpt. 
-
-## 3. About Code Files
-
-- Package
-  - data
-    - user.py
-    - book.py
-  - deal
-    - bookInfo.py
-    - spider.py
-  - pythons
-    - base.py
-
-- main.py
-
-![image-20230409200159814](assets/image-20230409200159814.png)
-
-
-
-Accoding to the user.py can know it save data and function.
-
-book.py for other python files to quote data.
-
-bookInfo.py during testing (Addition export cover link into file is csv on April 9,2023).
-
-spider.py is main function of  spider website.
-
-At present saving data and running main file in main.py.
-
-In pythons packages under file is both Stack and Queue. 
 
 ## 4. Running
 
