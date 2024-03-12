@@ -21,6 +21,7 @@ class Glo:
     book: int = 0
     movie: int = 1
 
+
     # Notion 数据: Token、Database ID
     Token: dict[str] = {
         "Book": os.environ.get("BOOK_TOKEN"),

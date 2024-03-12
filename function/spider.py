@@ -15,13 +15,15 @@ from function.glo import douban
 from function.glo import Glo
 
 
-
 class Book:
     def __init__(self, page: int = 0):
         self.url: str = douban(Glo.book, page)
         self.header: dict[str] = Glo.header
         self.MaxBook: int = Glo.MAXNum
         self.request: BeautifulSoup = self.get()
+        self.valid_num: int = 0
+        self.valid: bool = True
+        self.lasted_book: str = ""
 
         self.Titles: list[str | Any] = []
         self.Authors: list[str | Any] = []
@@ -46,21 +48,31 @@ class Book:
 
     def get(self) -> BeautifulSoup:
         response = requests.get(self.url, headers=self.header)
+        self.request: BeautifulSoup = BeautifulSoup(response.text, "html.parser")
 
-        return BeautifulSoup(response.text, "html.parser")
+        return self.request
 
     def title(self) -> list[str]:
+        """
+        以书名探测新增阅读数量
+        :return: 书名
+        """
         # Find all the a tags with a "title" attribute and print their text content
         count: int = 0
+        file = open("./last_mark.txt", "r", encoding="utf-8")
+        last_book = file.readlines().pop()
+        file.close()
 
         for i in self.request.find_all("a", {"title": True}):
             for span in i.find_all("span"):
                 span.extract()
-
             self.Titles.append(i.text.strip())
-            count += 1
 
-            if count == self.MaxBook:
+            # 仅获取图书数目标题
+            count += 1
+            self.valid_num += 1
+            if count == self.MaxBook or i.text.strip() == last_book:
+                self.valid = False
                 break
 
         return self.Titles
@@ -171,19 +183,25 @@ class Video(Book):
         return self.CoverLinks
 
 if __name__ == '__main__':
-    book = Book()
-    book.title()
-    book.author()
-    book.comment()
-    book.cover_link()
-    book.rating()
-    book.tags()
-    book.date()
+    # book = Book()
+    # book.title()
+    # book.author()
+    # book.comment()
+    # book.cover_link()
+    # book.rating()
+    # book.tags()
+    # book.date()
 
     # print(book.Titles)
     # print(book.author())
     # print(book.comment())
     # print(book.cover_link())
-    print(book.rating())
+    # print(book.rating())
     # print(book.tags())
     # print(book.date())
+
+    read_file = open("../last_mark.txt", "r", encoding="utf-8")
+    book = read_file.readlines()
+    read_file.close()
+    while True:
+        print(book)
