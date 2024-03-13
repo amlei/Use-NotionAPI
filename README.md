@@ -1,41 +1,92 @@
-# With-NotionAPI
 > Saving data of the books and videos into the notion page with Python.
 
 >使用Python将图书和影视数据存放入Notion中。
 
+
+
+# 🖼️介绍
+
+## 环境
+
+- Python 3.10+ （建议 3.11 及以上）
+- Pycharm / Vs Code / Vs Code Studio
+
+## 项目结构
+
+```
+│  .env
+│  main.py - 主函数、执行程序
+│  new_book.txt - 上一次更新书籍
+│  new_video.txt - 上一次更新影视
+│  README.md
+│  requirements.txt - 依赖库
+│
+├─assets - README.md文件
+│
+├─function - 其它功能函数
+│  │  glo.py - 全局数据 
+│  │  spider.py - 爬取个人豆瓣数据
+│  │  __init__.py
+│
+└─icon - 图标
+        book.svg
+        movie.svg
+        video.svg
+```
+
 ---
-# 🗣️语言  
-[English](./README.md)
 
-[中文简体](./README%20-%20Chinese%20Simplified.md)
+# 🐾 步骤
 
-# 🎈注意
+1. [Notion API创建](https://www.notion.so/Notion-93ad50c4bcc34c608fdc1fe211d6b322?pvs=21)
+2. [数据爬取](https://www.notion.so/Notion-93ad50c4bcc34c608fdc1fe211d6b322?pvs=21)
+3. 更新入Notion
 
-该项目处于测试阶段，所以我并不敢保证它能够在你的电脑上良好运行，也正在完善功能。如果你有发现什么问题并且愿意告诉我，我很乐意解决它，谢谢！
+## 🕷️ 网页数据
 
-[查看最新进度](https://www.notion.so/yapotato/Notion-API-93ad50c4bcc34c608fdc1fe211d6b322?pvs=4)
+- 头文件
+  - URL
+  - Cookie
+  - User-Agent
+- 图书
+  - 书名
+  - 图像
+  - 作者
+  - 出版日期
+  - 出版社
+  - 标记数据
+  - 短评
+- 影视
+  - 影片名
+  - 图像
+  - 上映日期
+  - 标记数据
 
-# 🖼️环境
 
-- Python 3.9+ ( < 3.12)
-- PyCharm 2021+
 
----
+## 🤖 Notion
 
-# 🎢 进度
+- [获得Token码](https://www.notion.so/Notion-18d07bcc24d54bddb97110814b23ddb6?pvs=21)
+- 获得数据库页面ID并链接
+- 存入数据
 
-## 网页爬取 ([豆瓣网](https://www.douban.com/))
 
-- [x] 图像链接 (保存为Excel文件)
-- [x] 页面跳转
-- [ ] 指定数据量
 
-## 更新入Notion数据库
+# 🎢 特征
 
-- [ ] 上一次运行
-- [ ] 图标
-- [ ] 图像
-- [x] 评分
+## [豆瓣网](https://www.douban.com/)数据
+
+- [x] 数据图像
+- [x] 翻页数据提取
+- [x] 增量更新
+
+## 存入 Notion
+
+- [x] 图标
+- [x] 图像
+- [x] 评星
+
+
 
 # 🤖行动
 
@@ -45,43 +96,33 @@
 
 ![image-20230612163511339](./assets/image-20230612163511339.png)
 
-## 2. 项目架构  (等待最后完成)
+## 2. 修改必要数据
 
-<img src="./assets/image-20230612161852099.png" alt="image-20230612161852099|" style="zoom:75%;" />
+下载好源码后解压进入目录，执行以下步骤：（[点击下载](https://github.com/amlei/Use-NotionAPI/archive/refs/heads/main.zip)）
 
-**以下内容均是旧版本❗**
+1. 安装依赖
 
-user.py 顾名思义——存放用户数据。
+```powershell
+pip install -r rerequirements.txt
+```
 
-book.py 使其它文件引用书籍数据。
 
-bookInfo.py 处于测试阶段(2023 2023年4月9日增加导出图像链接为csv文件)。
 
-spider.py 是爬取数据的主要方法。
+2. 打开 `new_book.txt` 与 `new_video.txt` 更改你的 Notion 页面中最新的标记数据
 
-main.py 是目前存储数据和运行的主要文件
+3. 打开 `.env` 文件，修改必要参数
 
-pythons包下的文件为Stack（栈）和Queue（队列）的实现方法。
+<img src="./assets/image-20240313172916768.png" alt="image-20240313172916768" style="zoom:25%;" />
 
-## 3. 修改必要数据
+4. 运行 `main.py` 文件
 
-首先，修改一些必要网站和[Notion API](https://developers.notion.com/)的必要参数。网站：“[豆瓣网](https://www.douban.com/)”的URL和Cookie。Notion API的Token和数据（页面）ID。
+<img src="./assets/image-20240313172931685.png" alt="image-20240313172931685" style="zoom: 15%;" />
 
-然后，修改书籍的默认信息，如评分、状态、书籍分类（电子书/纸质书或有声书）、书评以及书摘。
-
-## 4. 运行
-
-你必须通过 [第三步](#3. 修改必要数据) 后才能完成运行NotionPage.py
-
-# 🎗️For Example
-
-![image-20230331205442903](./assets/image-20230331205442903.png)
-
-![image-20230331205436292](./assets/image-20230331205436292.png)
-
-[Notion API的使用——获取豆瓣书影数据更新入Notion数据库_哔哩哔哩](https://www.bilibili.com/video/BV15o4y1W7hw/?spm_id_from=333.999.0.0)
+![result](./assets/result.png)
 
 # 🔗其它链接
+
+[Notion API的使用——获取豆瓣书影数据更新入Notion数据库_哔哩哔哩](https://www.bilibili.com/video/BV15o4y1W7hw/?spm_id_from=333.999.0.0)
 
 [创建 Notion API](https://www.notion.so/my-integrations)
 

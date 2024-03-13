@@ -321,6 +321,7 @@ class VideoRun(BookRun):
 def main(option: int = 0) -> None:
     """
     主函数
+    :param option: 0-图书 1-影视
     :return:
     """
     page: int = 0
