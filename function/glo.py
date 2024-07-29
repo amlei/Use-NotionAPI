@@ -9,7 +9,9 @@
 """
 import os
 from dotenv import load_dotenv
+from function.logging import Logging
 load_dotenv()
+
 
 class Glo:
     """
@@ -19,18 +21,13 @@ class Glo:
     MAXNum: int = 15
     option_classify: int = os.environ.get("CLASSIFY")
     book: int = 0
-    movie: int = 1
-
+    video: int = 1
 
     # Notion 数据: Token、Database ID
-    Token: dict[str] = {
-        "Book": os.environ.get("BOOK_TOKEN"),
-        "Video": os.environ.get("VIDEO_TOKEN")
-    }
-    DatabaseID: dict[str] = {
-        "Book": os.environ.get("BOOK_DATABASEID"),
-        "Video": os.environ.get("VIDEO_DATABASEID")
-    }
+    Token = os.environ.get("TOKEN")
+
+    Book_Databases_ID = os.environ.get("BOOK_DATABASE_ID")
+    Video_Databases_ID = os.environ.get("VIDEO_DATABASE_ID")
 
     # 个人头文件
     header: dict[str] = {
@@ -41,6 +38,7 @@ class Glo:
 
     # 数据信息
     star: str = os.environ.get("STAR")
+    Logging().info("Get data for global.")
 
 
 def douban(select: int = 0, page: int = 0) -> str:

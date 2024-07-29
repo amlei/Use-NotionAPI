@@ -3,25 +3,27 @@
 @Project: Python
 @File: main.py
 @Date: 2023/3/27 11:55
-@Author: YaPotato
+@Author: Amlei (lixiang.altr@qq.com)
 @version: python 3.12
 @IDE: PyCharm 2023.1
 """
+import pprint
+
+import json
 import os
 from datetime import datetime
 from time import sleep
-from typing import Any, Dict, List
 from dotenv import load_dotenv
 from notion_client import Client
 from function.glo import Glo
 from function.spider import Book, Video
-
+from function.logging import Logging
 
 # 最新记录
 newest_mark: str = ""
 # 本次增量数
 count: int = 0
-
+path: str = "./last mark"
 
 def option(op: int = 0) -> str:
     match op:
@@ -37,7 +39,7 @@ def last_mark(op: int = 0) -> str:
     :param op: 0: 书  1: 影视
     :return: None
     """
-    with open(f"./new_{option(op)}.txt", "r", encoding="utf-8") as f:
+    with open(f"{path}/new_{option(op)}.txt", "r", encoding="utf-8") as f:
         return f.readlines().pop()
 
 
@@ -49,7 +51,7 @@ def new_mark(option: str) -> None:
     """
     global newest_mark
 
-    with open(f"./new_{option}.txt", "w", encoding="utf-8") as f:
+    with open(f"{path}/new_{option}.txt", "w", encoding="utf-8") as f:
         f.writelines(newest_mark)
 
 
@@ -63,10 +65,8 @@ class BookRun:
         self.page: int = page
         self.title: str = ""
         self.option: int = Glo.book
-
         self.classify = Book(page=page)
-
-
+        self.valid: bool = self.classify.valid
 
     def create_page(self) -> int:
         """
@@ -86,7 +86,6 @@ class BookRun:
             match self.option:
                 case Glo.book:
                     title = f"《{self.title}》"
-
                     database_id = Glo.Book_Databases_ID
                 case _:
                     title = self.title
@@ -104,15 +103,15 @@ class BookRun:
             created_page = self.client.pages.create(parent={"database_id": database_id}, properties=new_page)
             # 存储创建的页面 ID
             pageID = created_page['id']
-            print(f"{self.title}创建成功!")
+            Logging().info(f"{self.title}创建成功!")
             count += 1
 
             return pageID
 
         except IndexError:
-            print("增量更新完毕!")
+            Logging().info(f"增量更新完毕!, 本次共:{count}条数据")
+
             new_mark(option(self.option))
-            print("本次共:%d", count)
             exit()
             pass
 
@@ -159,7 +158,7 @@ class BookRun:
         except IndexError:
             # 获取日期超过范围，说明该书没有出版日期信息
             today = datetime.now().strftime("%Y-%m-%d")
-            print(f"捕获到{AuthorContent[0]}书籍出现出版日期错误，日期填充已更改为今日({today})请完成数据填充后自行更改")
+            Logging().warning(f"捕获到{AuthorContent[0]}书籍出现出版日期错误，日期填充已更改为今日({today})请完成数据填充后自行更改")
             date = today
 
         # 作者
@@ -171,64 +170,16 @@ class BookRun:
         for j in range(len(tags)):
             category.append(dict(name=tags[j]))
 
-        properties = {
-            "状态": {
-                "select": {
-                    "name": os.environ.get("STATUS").split("|")[0]
-                }
-            },
-            "评分": {
-                "select": {
-                    "name": self.classify.Ratings.pop(0)
-                }
-            },
-            "来源": {
-                "select": {
-                    "name": os.environ.get("CATEGORY")
-                }
-            },
-            "短评": {
-                "rich_text": [
-                    {
-                        "text": {
-                            "content": self.classify.Comments.pop(0)
-                        }
-                    }
-                ]
-            },
-            "读完时间": {
-                "date": {
-                    "start": self.classify.Dates.pop(0)
-                }
-            },
-            "出版社": {
-                "select": {
-                    "name": str(publishingCompany)
-                }
-            },
-            "出版日期": {
-                "date": {
-                    "start": date
-                }
-            },
-            "作者": {
-                "multi_select": author
+        with open("./json/book.json", "r", encoding="utf-8") as f:
+            properties = json.load(f)
 
-            },
-            "类别": {
-                "multi_select": category
-            },
-            "书评": {
-                "select": {
-                    "name": os.environ.get("COMMENT")
-                }
-            },
-            "书摘": {
-                "select": {
-                    "name": os.environ.get("MARK")
-                }
-            }
-        }
+            properties["评分"]["select"]["name"] = self.classify.Ratings.pop(0)
+            properties["出版社"]["select"]["name"] = str(publishingCompany)
+            properties["读完时间"]["date"]["start"] = self.classify.Dates.pop(0)
+            properties["出版日期"]["date"]["start"] = date
+            properties["作者"]["multi_select"] = author
+            properties["类别"]["multi_select"] = category
+            properties["短评"]["rich_text"][0]["text"]["content"] = self.classify.Comments.pop(0)
 
         return properties
 
@@ -243,7 +194,7 @@ class BookRun:
         self.classify.other()
         self.classify.cover_link()
         self.classify.rating()
-        self.print_all()
+        # self.print_all()
 
         # 图标
         icon: dict = {
@@ -254,7 +205,7 @@ class BookRun:
         }
 
         for i in range(Glo.MAXNum):
-            property: dict = self.progress()
+            properties: dict = self.progress()
             # 背景图
             cover = {
                 "type": "external",
@@ -263,8 +214,7 @@ class BookRun:
                 }
             }
             sleep(2)
-            self.client.pages.update(page_id=self.create_page(), properties=property, icon=icon, cover=cover)
-
+            self.client.pages.update(page_id=self.create_page(), properties=properties, icon=icon, cover=cover)
 
 class VideoRun(BookRun):
     def __init__(self, page: int = 0):
@@ -289,31 +239,12 @@ class VideoRun(BookRun):
         for j in range(len(tags)):
             category.append(dict(name=tags[j]))
 
-        properties = {
-            "状态": {
-                "select": {
-                    "name": os.environ.get("STATUS").split("|")[1]
-                }
-            },
-            "评分": {
-                "select": {
-                    "name": self.classify.Ratings.pop(0)
-                }
-            },
-            "观影日期": {
-                "date": {
-                    "start": self.classify.Dates.pop(0)
-                }
-            },
-            "上映日期": {
-                "date": {
-                    "start": self.classify.Release.pop(0)
-                }
-            },
-            "类别": {
-                "multi_select": category
-            }
-        }
+        with open("./json/video.json", "r", encoding="utf-8") as f:
+            properties: dict = json.load(f)
+            properties["评分"]["select"]["name"] = self.classify.Ratings.pop(0)
+            properties["观影日期"]["date"]["start"] = self.classify.Dates.pop(0)
+            properties["上映日期"]["date"]["start"] = self.classify.Release.pop(0)
+            properties["类别"]["multi_select"] = category
 
         return properties
 
@@ -325,30 +256,24 @@ def main(option: int = 0) -> None:
     :return:
     """
     page: int = 0
-    match option:
-        case Glo.book:
-            while True:
-                run = BookRun(page=page)
-                run.update(os.environ.get("BOOK_ICON"))
 
-                page += 15
-                print("下一页")
-                sleep(5)
-        case _:
-            while True:
-                run = VideoRun(page=page)
+    while True:
+        if option == Glo.book:
+            run = BookRun(page=page)
+            Logging().info(f"last mark of 【book】:《{last_mark(Glo.book)}》")
+            run.update(os.environ.get("BOOK_ICON"))
 
-                run.update(os.environ.get("VIDEO_ICON"))
+        else:
+            run = VideoRun(page=page)
+            Logging().info(f"Last mark of 【video】:{last_mark(Glo.video)}")
+            run.update(os.environ.get("VIDEO_ICON"))
 
-                page += 15
-                print("下一页")
-                sleep(5)
+        page += 15
+        Logging().info("Please wait 5s to next page.")
+        sleep(5)
 
 
 if __name__ == '__main__':
-    # main()
-    # a = last_mark()
-    # print(a)
-    main(1)
-
+    main(option=1)
+    Logging().info("End task.")
 
