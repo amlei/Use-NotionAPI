@@ -15,7 +15,7 @@ from typing import Any, Tuple, List
 from bs4 import BeautifulSoup
 from function.glo import douban
 from function.glo import Glo
-from function.logging import Logging
+from loguru import logger
 
 class Book:
     def __init__(self, page: int = 0):
@@ -45,14 +45,14 @@ class Book:
         self.Comments: list[str | Any] = []
         self.CoverLinks: list[str | Any] = []
         self.Ratings: list[str | Any] = []
-        Logging().info("Clear Stacked.")
+        logger.info("Clear Stacked.")
 
     def get(self) -> BeautifulSoup:
         sleep(3)
-        Logging().info(f"GET {self.url}")
+        logger.info(f"GET {self.url}")
         response = requests.get(self.url, headers=self.header)
         self.request: BeautifulSoup = BeautifulSoup(response.text, "html.parser")
-        Logging().info(f"GET {self.url} Succeed.")
+        logger.info(f"GET {self.url} Succeed.")
         return self.request
 
     def title(self, last_book: str) -> list[str]:
@@ -62,13 +62,13 @@ class Book:
         """
         # Find all the a tags with a "title" attribute and print their text content
         count: int = 0
-        Logging().info(f"In title.")
+        logger.info(f"In title.")
         for i in self.request.find_all("a", {"title": True}):
             for span in i.find_all("span"):
                 span.extract()
             if i.text.strip() == last_book:
                 self.valid = False
-                Logging().warning(f"Current is invalid.")
+                logger.warning(f"Current is invalid.")
                 break
             else:
                 self.Titles.append(i.text.strip())
@@ -77,17 +77,17 @@ class Book:
                 count += 1
                 if count == self.MaxBook:
                     break
-        Logging().info(f"Title: {self.Titles}")
+        logger.info(f"Title: {self.Titles}")
         return self.Titles
 
     def author(self):
         pattern = r"\[[^\]]*\]||（[.*]）"
-        Logging().info(f"Xpath Rules for Author: {pattern}")
+        logger.info(f"Xpath Rules for Author: {pattern}")
         for div in self.request.find_all("div", {"class": "pub"}):
             text = div.text.strip().replace(" ", "").split("/")
 
             self.Authors.append([re.sub(pattern, "", text[0]), text[1:-1]])
-            Logging().info(f"Author: {[re.sub(pattern, "", text[0]), text[1:-1]]}")
+            logger.info(f"Author: {[re.sub(pattern, "", text[0]), text[1:-1]]}")
 
         return self.Authors
 
@@ -101,20 +101,20 @@ class Book:
         for div in self.request.find_all("p", {"class": "comment"}):
             self.Comments.append(div.text.strip())
 
-        Logging().info(f"Other Info: {self.Tags}, {self.Dates}, {self.Comments}")
+        logger.info(f"Other Info: {self.Tags}, {self.Dates}, {self.Comments}")
         return self.Tags, self.Dates, self.Comments
 
     def cover_link(self) -> list[str]:
         for div in self.request.find_all("img", {"width": "90"}):
             self.CoverLinks.append(div.get("src"))
-            Logging().info(f"Cover Link: {div.get('src')}")
+            logger.info(f"Cover Link: {div.get('src')}")
 
         return self.CoverLinks
 
     def rating(self) -> list[str]:
         # 使用正则表达式匹配class包含rating和数字的span标签
         pattern = re.compile(r'rating\d+-t')
-        Logging().info(f"Xpath Rules for Rating: rating\\d+-t")
+        logger.info(f"Xpath Rules for Rating: rating\\d+-t")
         span_tags = self.request.find_all('span', {'class': pattern})
 
         # 取每个span标签的数字部分

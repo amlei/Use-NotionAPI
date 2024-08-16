@@ -17,13 +17,14 @@ from dotenv import load_dotenv
 from notion_client import Client
 from function.glo import Glo
 from function.spider import Book, Video
-from function.logging import Logging
+from loguru import logger
 
 # 最新记录
 newest_mark: str = ""
 # 本次增量数
 count: int = 0
 path: str = "./last mark"
+
 
 def option(op: int = 0) -> str:
     match op:
@@ -103,13 +104,13 @@ class BookRun:
             created_page = self.client.pages.create(parent={"database_id": database_id}, properties=new_page)
             # 存储创建的页面 ID
             pageID = created_page['id']
-            Logging().info(f"{self.title}创建成功!")
+            logger.info(f"《{self.title}》创建成功!")
             count += 1
 
             return pageID
 
         except IndexError:
-            Logging().info(f"增量更新完毕!, 本次共:{count}条数据")
+            logger.info(f"增量更新完毕!, 本次共:{count}条数据")
 
             new_mark(option(self.option))
             exit()
@@ -158,7 +159,7 @@ class BookRun:
         except IndexError:
             # 获取日期超过范围，说明该书没有出版日期信息
             today = datetime.now().strftime("%Y-%m-%d")
-            Logging().warning(f"捕获到{AuthorContent[0]}书籍出现出版日期错误，日期填充已更改为今日({today})请完成数据填充后自行更改")
+            logger.warning(f"捕获到{AuthorContent[0]}书籍出现出版日期错误，日期填充已更改为今日({today})请完成数据填充后自行更改")
             date = today
 
         # 作者
@@ -249,31 +250,35 @@ class VideoRun(BookRun):
         return properties
 
 
-def main(option: int = 0) -> None:
+def main(option: int = 0, page: int = 0) -> None:
     """
     主函数
     :param option: 0-图书 1-影视
+    :param page: 页数
     :return:
     """
-    page: int = 0
-
     while True:
         if option == Glo.book:
             run = BookRun(page=page)
-            Logging().info(f"last mark of 【book】:《{last_mark(Glo.book)}》")
+            # print(f"上一次【图书】标记:《{last_mark(Glo.book)}》")
+            logger.info(f"last mark of 【book】:《{last_mark(Glo.book)}》")
             run.update(os.environ.get("BOOK_ICON"))
 
         else:
             run = VideoRun(page=page)
-            Logging().info(f"Last mark of 【video】:{last_mark(Glo.video)}")
+            # print(f"上一次影视标记:{last_mark(Glo.video)}")
+            logger.info(f"Last mark of 【video】:{last_mark(Glo.video)}")
             run.update(os.environ.get("VIDEO_ICON"))
 
         page += 15
-        Logging().info("Please wait 5s to next page.")
+        # print("下一页, 等待5秒")
+        logger.info("Please wait 5s to next page.")
         sleep(5)
 
 
 if __name__ == '__main__':
-    main(option=1)
-    Logging().info("End task.")
+    logger.add(f"./log/{datetime.now().strftime('%Y-%m-%d')}.log")
+    logger.info("Start Application.")
 
+    main()
+    logger.info("End task.")

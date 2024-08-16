@@ -9,7 +9,7 @@
 """
 import os
 from dotenv import load_dotenv
-from function.logging import Logging
+from loguru import logger
 load_dotenv()
 
 
@@ -38,7 +38,7 @@ class Glo:
 
     # 数据信息
     star: str = os.environ.get("STAR")
-    Logging().info("Get data for global.")
+    logger.info("Get data for global.")
 
 
 def douban(select: int = 0, page: int = 0) -> str:
